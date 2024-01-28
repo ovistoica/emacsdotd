@@ -20,7 +20,7 @@
 (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache/" user-emacs-directory))
 
 (setq dw/is-termux nil)
-      
+
 
 (setq dw/is-guix-system t)
 
@@ -29,13 +29,13 @@
 ;; Bootstrap straight.el
 (defvar bootstrap-version)
 (let ((bootstrap-file
-      (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
-        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-        'silent 'inhibit-cookies)
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
@@ -55,7 +55,7 @@
 
 ;; Use no-littering to automatically set common paths to the new user-emacs-directory
 (use-package no-littering)
-  
+
 
 ;; Keep customization settings in a temporary file (thanks Ambrevar!)
 (setq custom-file
@@ -94,7 +94,7 @@
                   circe-query-mode
                   sauron-mode
                   term-mode))
-  (add-to-list 'evil-emacs-state-modes mode)))
+    (add-to-list 'evil-emacs-state-modes mode)))
 
 (defun dw/dont-arrow-me-bro ()
   (interactive)
@@ -123,15 +123,15 @@
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
-    ;; Disable arrow keys in normal and visual modes
-    (define-key evil-normal-state-map (kbd "<left>") 'dw/dont-arrow-me-bro)
-    (define-key evil-normal-state-map (kbd "<right>") 'dw/dont-arrow-me-bro)
-    (define-key evil-normal-state-map (kbd "<down>") 'dw/dont-arrow-me-bro)
-    (define-key evil-normal-state-map (kbd "<up>") 'dw/dont-arrow-me-bro)
-    (evil-global-set-key 'motion (kbd "<left>") 'dw/dont-arrow-me-bro)
-    (evil-global-set-key 'motion (kbd "<right>") 'dw/dont-arrow-me-bro)
-    (evil-global-set-key 'motion (kbd "<down>") 'dw/dont-arrow-me-bro)
-    (evil-global-set-key 'motion (kbd "<up>") 'dw/dont-arrow-me-bro)
+  ;; Disable arrow keys in normal and visual modes
+  (define-key evil-normal-state-map (kbd "<left>") 'dw/dont-arrow-me-bro)
+  (define-key evil-normal-state-map (kbd "<right>") 'dw/dont-arrow-me-bro)
+  (define-key evil-normal-state-map (kbd "<down>") 'dw/dont-arrow-me-bro)
+  (define-key evil-normal-state-map (kbd "<up>") 'dw/dont-arrow-me-bro)
+  (evil-global-set-key 'motion (kbd "<left>") 'dw/dont-arrow-me-bro)
+  (evil-global-set-key 'motion (kbd "<right>") 'dw/dont-arrow-me-bro)
+  (evil-global-set-key 'motion (kbd "<down>") 'dw/dont-arrow-me-bro)
+  (evil-global-set-key 'motion (kbd "<up>") 'dw/dont-arrow-me-bro)
 
   (evil-set-initial-state 'messages-buffer-mode 'normal)
   (evil-set-initial-state 'dashboard-mode 'normal))
@@ -174,10 +174,10 @@
 ;; Thanks, but no thanks
 (setq inhibit-startup-message t)
 
-  (scroll-bar-mode -1)       ; Disable visible scrollbar
-  (tool-bar-mode -1)          ; Disable the toolbar
-  (tooltip-mode -1)           ; Disable tooltips
-  (set-fringe-mode 10)       ; Give some breathing room
+(scroll-bar-mode -1)       ; Disable visible scrollbar
+(tool-bar-mode -1)          ; Disable the toolbar
+(tooltip-mode -1)           ; Disable tooltips
+(set-fringe-mode 10)       ; Give some breathing room
 
 (menu-bar-mode -1)            ; Disable the menu bar
 
@@ -262,8 +262,8 @@
 
 (defun dw/replace-unicode-font-mapping (block-name old-font new-font)
   (let* ((block-idx (cl-position-if
-                         (lambda (i) (string-equal (car i) block-name))
-                         unicode-fonts-block-font-mapping))
+                     (lambda (i) (string-equal (car i) block-name))
+                     unicode-fonts-block-font-mapping))
          (block-fonts (cadr (nth block-idx unicode-fonts-block-font-mapping)))
          (updated-block (cl-substitute new-font old-font block-fonts :test 'string-equal)))
     (setf (cdr (nth block-idx unicode-fonts-block-font-mapping))
@@ -277,12 +277,12 @@
   :config
   ;; Fix the font mappings to use the right emoji font
   (mapcar
-    (lambda (block-name)
-      (dw/replace-unicode-font-mapping block-name "Apple Color Emoji" "Noto Color Emoji"))
-    '("Dingbats"
-      "Emoticons"
-      "Miscellaneous Symbols and Pictographs"
-      "Transport and Map Symbols"))
+   (lambda (block-name)
+     (dw/replace-unicode-font-mapping block-name "Apple Color Emoji" "Noto Color Emoji"))
+   '("Dingbats"
+     "Emoticons"
+     "Miscellaneous Symbols and Pictographs"
+     "Transport and Map Symbols"))
   (unicode-fonts-setup))
 
 
@@ -343,13 +343,13 @@
 
 
 (setq display-time-world-list
-  '(("Etc/UTC" "UTC")
-    ("America/Los_Angeles" "Seattle")
-    ("America/New_York" "New York")
-    ("Europe/Athens" "Athens")
-    ("Pacific/Auckland" "Auckland")
-    ("Asia/Shanghai" "Shanghai")
-    ("Asia/Kolkata" "Hyderabad")))
+      '(("Etc/UTC" "UTC")
+        ("America/Los_Angeles" "Seattle")
+        ("America/New_York" "New York")
+        ("Europe/Athens" "Athens")
+        ("Pacific/Auckland" "Auckland")
+        ("Asia/Shanghai" "Shanghai")
+        ("Asia/Kolkata" "Hyderabad")))
 (setq display-time-world-time-format "%a, %d %b %I:%M %p %Z")
 
 
@@ -408,10 +408,10 @@
   (setq history-length 25)
   (savehist-mode 1))
 
-  ;; Individual history elements can be configured separately
-  ;;(put 'minibuffer-history 'history-length 25)
-  ;;(put 'evil-ex-history 'history-length 50)
-  ;;(put 'kill-ring 'history-length 25))
+;; Individual history elements can be configured separately
+;;(put 'minibuffer-history 'history-length 25)
+;;(put 'evil-ex-history 'history-length 50)
+;;(put 'kill-ring 'history-length 25))
 
 
 
@@ -424,18 +424,18 @@ folder, otherwise delete a word"
       (if (string-match-p "/." (minibuffer-contents))
           (zap-up-to-char (- arg) ?/)
         (delete-minibuffer-contents))
-      (delete-word (- arg))))
+    (delete-word (- arg))))
 
 (use-package vertico
   ;; :straight '(vertico :host github
   ;;                     :repo "minad/vertico"
   ;;                     :branch "main")
   :bind (:map vertico-map
-         ("C-j" . vertico-next)
-         ("C-k" . vertico-previous)
-         ("C-f" . vertico-exit)
-         :map minibuffer-local-map
-         ("M-h" . dw/minibuffer-backward-kill))
+              ("C-j" . vertico-next)
+              ("C-k" . vertico-previous)
+              ("C-f" . vertico-exit)
+              :map minibuffer-local-map
+              ("M-h" . dw/minibuffer-backward-kill))
   :custom
   (vertico-cycle t)
   :custom-face
@@ -450,9 +450,9 @@ folder, otherwise delete a word"
   :straight '(corfu :host github
                     :repo "minad/corfu")
   :bind (:map corfu-map
-         ("C-j" . corfu-next)
-         ("C-k" . corfu-previous)
-         ("C-f" . corfu-insert))
+              ("C-j" . corfu-next)
+              ("C-k" . corfu-previous)
+              ("C-f" . corfu-insert))
   :custom
   (corfu-cycle t)
   :config
@@ -639,11 +639,11 @@ folder, otherwise delete a word"
         org-capture-bookmark nil)
 
   (setq org-modules
-    '(org-crypt
-        org-habit
-        org-bookmark
-        org-eshell
-        org-irc))
+        '(org-crypt
+          org-habit
+          org-bookmark
+          org-eshell
+          org-irc))
 
   (setq org-refile-targets '((nil :maxlevel . 1)
                              (org-agenda-files :maxlevel . 1)))
@@ -658,127 +658,127 @@ folder, otherwise delete a word"
   (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
 
   (org-babel-do-load-languages
-    'org-babel-load-languages
-    '((emacs-lisp . t)
-      (ledger . t)))
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (ledger . t)))
 
   (push '("conf-unix" . conf-unix) org-src-lang-modes)
 
   ;; NOTE: Subsequent sections are still part of this use-package block!
 
-(require 'dw-org)
-(require 'dw-workflow)
+  (require 'dw-org)
+  (require 'dw-workflow)
 
 
 
-(use-package org-superstar
-  :if (not dw/is-termux)
-  :after org
-  :hook (org-mode . org-superstar-mode)
-  :custom
-  (org-superstar-remove-leading-stars t)
-  (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
+  (use-package org-superstar
+    :if (not dw/is-termux)
+    :after org
+    :hook (org-mode . org-superstar-mode)
+    :custom
+    (org-superstar-remove-leading-stars t)
+    (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-;; Replace list hyphen with dot
-;; (font-lock-add-keywords 'org-mode
-;;                         '(("^ *\\([-]\\) "
-;;                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+  ;; Replace list hyphen with dot
+  ;; (font-lock-add-keywords 'org-mode
+  ;;                         '(("^ *\\([-]\\) "
+  ;;                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-;; Increase the size of various headings
-(set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
-(dolist (face '((org-level-1 . 1.2)
-                (org-level-2 . 1.1)
-                (org-level-3 . 1.05)
-                (org-level-4 . 1.0)
-                (org-level-5 . 1.1)
-                (org-level-6 . 1.1)
-                (org-level-7 . 1.1)
-                (org-level-8 . 1.1)))
-  (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
+  ;; Increase the size of various headings
+  (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
+  (dolist (face '((org-level-1 . 1.2)
+                  (org-level-2 . 1.1)
+                  (org-level-3 . 1.05)
+                  (org-level-4 . 1.0)
+                  (org-level-5 . 1.1)
+                  (org-level-6 . 1.1)
+                  (org-level-7 . 1.1)
+                  (org-level-8 . 1.1)))
+    (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
 
-;; Make sure org-indent face is available
-(require 'org-indent)
+  ;; Make sure org-indent face is available
+  (require 'org-indent)
 
-;; Ensure that anything that should be fixed-pitch in Org files appears that way
-(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-(set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
-(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+  (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+  (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
 
-;; Get rid of the background on column views
-(set-face-attribute 'org-column nil :background nil)
-(set-face-attribute 'org-column-title nil :background nil)
+  ;; Get rid of the background on column views
+  (set-face-attribute 'org-column nil :background nil)
+  (set-face-attribute 'org-column-title nil :background nil)
 
-;; TODO: Others to consider
-;; '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-;; '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-;; '(org-property-value ((t (:inherit fixed-pitch))) t)
-;; '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-;; '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
-;; '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-;; '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
-
-
-
-;; This is needed as of Org 9.2
-(require 'org-tempo)
-
-(add-to-list 'org-structure-template-alist '("sh" . "src sh"))
-(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-(add-to-list 'org-structure-template-alist '("li" . "src lisp"))
-(add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
-(add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
-(add-to-list 'org-structure-template-alist '("py" . "src python"))
-(add-to-list 'org-structure-template-alist '("go" . "src go"))
-(add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
-(add-to-list 'org-structure-template-alist '("json" . "src json"))
+  ;; TODO: Others to consider
+  ;; '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+  ;; '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+  ;; '(org-property-value ((t (:inherit fixed-pitch))) t)
+  ;; '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+  ;; '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+  ;; '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+  ;; '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 
 
 
-(use-package org-pomodoro
-  :after org
-  :config
-  (setq org-pomodoro-start-sound "~/.dotfiles/.emacs.d/sounds/focus_bell.wav")
-  (setq org-pomodoro-short-break-sound "~/.dotfiles/.emacs.d/sounds/three_beeps.wav")
-  (setq org-pomodoro-long-break-sound "~/.dotfiles/.emacs.d/sounds/three_beeps.wav")
-  (setq org-pomodoro-finished-sound "~/.dotfiles/.emacs.d/sounds/meditation_bell.wav")
+  ;; This is needed as of Org 9.2
+  (require 'org-tempo)
+
+  (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("li" . "src lisp"))
+  (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
+  (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("go" . "src go"))
+  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
+  (add-to-list 'org-structure-template-alist '("json" . "src json"))
+
+
+
+  (use-package org-pomodoro
+    :after org
+    :config
+    (setq org-pomodoro-start-sound "~/.dotfiles/.emacs.d/sounds/focus_bell.wav")
+    (setq org-pomodoro-short-break-sound "~/.dotfiles/.emacs.d/sounds/three_beeps.wav")
+    (setq org-pomodoro-long-break-sound "~/.dotfiles/.emacs.d/sounds/three_beeps.wav")
+    (setq org-pomodoro-finished-sound "~/.dotfiles/.emacs.d/sounds/meditation_bell.wav")
+
+    (dw/leader-key-def
+      "op"  '(org-pomodoro :which-key "pomodoro")))
+
+
+
+  (use-package evil-org
+    :after org
+    :hook ((org-mode . evil-org-mode)
+           (org-agenda-mode . evil-org-mode)
+           (evil-org-mode . (lambda () (evil-org-set-key-theme '(navigation todo insert textobjects additional)))))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
 
   (dw/leader-key-def
-    "op"  '(org-pomodoro :which-key "pomodoro")))
+    "o"   '(:ignore t :which-key "org mode")
+
+    "oi"  '(:ignore t :which-key "insert")
+    "oil" '(org-insert-link :which-key "insert link")
+
+    "on"  '(org-toggle-narrow-to-subtree :which-key "toggle narrow")
+
+    "os"  '(dw/counsel-rg-org-files :which-key "search notes")
+
+    "oa"  '(org-agenda :which-key "status")
+    "ot"  '(org-todo-list :which-key "todos")
+    "oc"  '(org-capture t :which-key "capture")
+    "ox"  '(org-export-dispatch t :which-key "export"))
 
 
-
-(use-package evil-org
-  :after org
-  :hook ((org-mode . evil-org-mode)
-         (org-agenda-mode . evil-org-mode)
-         (evil-org-mode . (lambda () (evil-org-set-key-theme '(navigation todo insert textobjects additional)))))
-  :config
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-
-(dw/leader-key-def
-  "o"   '(:ignore t :which-key "org mode")
-
-  "oi"  '(:ignore t :which-key "insert")
-  "oil" '(org-insert-link :which-key "insert link")
-
-  "on"  '(org-toggle-narrow-to-subtree :which-key "toggle narrow")
-
-  "os"  '(dw/counsel-rg-org-files :which-key "search notes")
-
-  "oa"  '(org-agenda :which-key "status")
-  "ot"  '(org-todo-list :which-key "todos")
-  "oc"  '(org-capture t :which-key "capture")
-  "ox"  '(org-export-dispatch t :which-key "export"))
-
-
-)
+  )
 
 
 
@@ -980,4 +980,59 @@ folder, otherwise delete a word"
 
 (use-package smartparens
   :hook (prog-mode . smartparens-mode)
-  )
+  :config
+  (progn
+    (define-key sp-keymap (kbd "s-{") 'sp-wrap-curly)
+    (define-key sp-keymap (kbd "s-[") 'sp-wrap-square)
+    (define-key sp-keymap (kbd "s-(") 'sp-wrap-round)
+    (define-key sp-keymap (kbd "s-J") 'sp-forward-barf-sexp)
+    (define-key sp-keymap (kbd "s-K") 'sp-forward-slurp-sexp)
+
+    (define-key sp-keymap (kbd "C-M-f") 'sp-forward-sexp)
+    (define-key sp-keymap (kbd "C-M-b") 'sp-backward-sexp)
+
+    (define-key sp-keymap (kbd "C-M-d") 'sp-down-sexp)
+    (define-key sp-keymap (kbd "C-M-a") 'sp-backward-down-sexp)
+    (define-key sp-keymap (kbd "C-S-a") 'sp-beginning-of-sexp)
+    (define-key sp-keymap (kbd "C-S-d") 'sp-end-of-sexp)
+
+    (define-key sp-keymap (kbd "C-M-e") 'sp-up-sexp)
+    (define-key emacs-lisp-mode-map (kbd ")") 'sp-up-sexp)
+    (define-key sp-keymap (kbd "C-M-u") 'sp-backward-up-sexp)
+    (define-key sp-keymap (kbd "C-M-t") 'sp-transpose-sexp)
+
+    (define-key sp-keymap (kbd "C-M-n") 'sp-next-sexp)
+    (define-key sp-keymap (kbd "C-M-p") 'sp-previous-sexp)
+    (define-key sp-keymap (kbd "C-M-k") 'sp-kill-sexp)
+    (define-key sp-keymap (kbd "C-M-w") 'sp-copy-sexp)
+    (define-key sp-keymap (kbd "M-D") 'sp-splice-sexp)
+    (define-key sp-keymap (kbd "C-S-<right>") 'sp-forward-slurp-sexp)
+    (define-key sp-keymap (kbd "C-S-<left>") 'sp-forward-barf-sexp)
+    (define-key sp-keymap (kbd "C-M-<backspace>") 'sp-splice-sexp-killing-backward)
+    (define-key sp-keymap (kbd "C-S-<backspace>") 'sp-splice-sexp-killing-around)
+    (define-key sp-keymap (kbd "C-M-S-<backspace>") 'sp-splice-sexp-killing-forward)
+
+    (define-key sp-keymap (kbd "M-F") 'sp-forward-symbol)
+    (define-key sp-keymap (kbd "M-B") 'sp-backward-symbol)
+
+    (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
+
+;;; markdown-mode
+    (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+      (sp-local-pair "*" "*" :bind "C-*")
+      (sp-local-tag "2" "**" "**")
+      (sp-local-tag "s" "```scheme" "```")
+      (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
+
+;;; tex-mode latex-mode
+    (sp-with-modes '(tex-mode plain-tex-mode latex-mode)
+      (sp-local-tag "i" "\"<" "\">"))
+
+;;; html-mode
+    (sp-with-modes '(html-mode sgml-mode)
+      (sp-local-pair "<" ">"))
+
+;;; lisp modes
+    (sp-with-modes sp--lisp-modes
+      (sp-local-pair "(" nil :bind "C-("))))
+)
