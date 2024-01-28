@@ -67,7 +67,8 @@
 
 
 ;; Add my library path to load-path
-(push "~/.dotfiles/.emacs.d/lisp" load-path)
+(add-to-list 'load-path "~/.dotfiles/.emacs.d/lisp")
+(add-to-list 'load-path "~/.emacs.d/lisp")
 
 (set-default-coding-systems 'utf-8)
 
@@ -312,8 +313,7 @@
   :hook (doom-modeline-mode . minions-mode))
 
 (use-package doom-modeline
-  :after eshell     ;; Make sure it gets hooked after eshell
-  :hook (after-init . doom-modeline-init)
+  :init (doom-modeline-mode 1)
   :custom-face
   (mode-line ((t (:height 0.85))))
   (mode-line-inactive ((t (:height 0.85))))
@@ -472,9 +472,15 @@ folder, otherwise delete a word"
   (when (fboundp 'projectile-project-root)
     (projectile-project-root)))
 
+
+(recentf-mode 1)
+(setq recentf-max-menu-items 30)
+(setq recentf-max-saved-items 30)
+
 (use-package consult
   :demand t
   :bind (("C-s" . consult-line)
+         ("s-f" . consult-line)
          ("C-M-l" . consult-imenu)
          ("C-M-j" . persp-switch-to-buffer*)
          :map minibuffer-local-map
@@ -559,10 +565,6 @@ folder, otherwise delete a word"
 ;;   (let ((margin-size (/ (- (frame-width) 80) 3)))
 ;;     (set-window-margins nil margin-size margin-size)))
 
-(defun dw/org-mode-visual-fill ()
-  (setq visual-fill-column-width 110
-        visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
 
 (use-package visual-fill-column
   :defer t
@@ -602,183 +604,7 @@ folder, otherwise delete a word"
 ;;         dired-hide-details-hide-symlink-targets nil
 ;;         delete-by-moving-to-trash t))
 
-
 ;; ORG
-
-
-;; TODO: Mode this to another section
-(setq-default fill-column 80)
-
-;; Turn on indentation and auto-fill mode for Org files
-(defun dw/org-mode-setup ()
-  (org-indent-mode)
-  (variable-pitch-mode 1)
-  (auto-fill-mode 0)
-  (visual-line-mode 1)
-  (setq evil-auto-indent nil)
-  (diminish org-indent-mode))
-
-;; Make sure Straight pulls Org from Guix
-(when dw/is-guix-system
-  (straight-use-package '(org :type built-in)))
-
-(use-package org
-  :defer t
-  :hook (org-mode . dw/org-mode-setup)
-  :config
-  (setq org-ellipsis " ▾"
-        org-hide-emphasis-markers t
-        org-src-fontify-natively t
-        org-fontify-quote-and-verse-blocks t
-        org-src-tab-acts-natively t
-        org-edit-src-content-indentation 2
-        org-hide-block-startup nil
-        org-src-preserve-indentation nil
-        org-startup-folded 'content
-        org-cycle-separator-lines 2
-        org-capture-bookmark nil)
-
-  (setq org-modules
-        '(org-crypt
-          org-habit
-          org-bookmark
-          org-eshell
-          org-irc))
-
-  (setq org-refile-targets '((nil :maxlevel . 1)
-                             (org-agenda-files :maxlevel . 1)))
-
-  (setq org-outline-path-complete-in-steps nil)
-  (setq org-refile-use-outline-path t)
-
-  (evil-define-key '(normal insert visual) org-mode-map (kbd "C-j") 'org-next-visible-heading)
-  (evil-define-key '(normal insert visual) org-mode-map (kbd "C-k") 'org-previous-visible-heading)
-
-  (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
-  (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
-
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (ledger . t)))
-
-  (push '("conf-unix" . conf-unix) org-src-lang-modes)
-
-  ;; NOTE: Subsequent sections are still part of this use-package block!
-
-  (require 'dw-org)
-  (require 'dw-workflow)
-
-
-
-  (use-package org-superstar
-    :if (not dw/is-termux)
-    :after org
-    :hook (org-mode . org-superstar-mode)
-    :custom
-    (org-superstar-remove-leading-stars t)
-    (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
-
-  ;; Replace list hyphen with dot
-  ;; (font-lock-add-keywords 'org-mode
-  ;;                         '(("^ *\\([-]\\) "
-  ;;                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-  ;; Increase the size of various headings
-  (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
-  (dolist (face '((org-level-1 . 1.2)
-                  (org-level-2 . 1.1)
-                  (org-level-3 . 1.05)
-                  (org-level-4 . 1.0)
-                  (org-level-5 . 1.1)
-                  (org-level-6 . 1.1)
-                  (org-level-7 . 1.1)
-                  (org-level-8 . 1.1)))
-    (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
-
-  ;; Make sure org-indent face is available
-  (require 'org-indent)
-
-  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-
-  ;; Get rid of the background on column views
-  (set-face-attribute 'org-column nil :background nil)
-  (set-face-attribute 'org-column-title nil :background nil)
-
-  ;; TODO: Others to consider
-  ;; '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-  ;; '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-  ;; '(org-property-value ((t (:inherit fixed-pitch))) t)
-  ;; '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-  ;; '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
-  ;; '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-  ;; '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
-
-
-
-  ;; This is needed as of Org 9.2
-  (require 'org-tempo)
-
-  (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("li" . "src lisp"))
-  (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
-  (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python"))
-  (add-to-list 'org-structure-template-alist '("go" . "src go"))
-  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
-  (add-to-list 'org-structure-template-alist '("json" . "src json"))
-
-
-
-  (use-package org-pomodoro
-    :after org
-    :config
-    (setq org-pomodoro-start-sound "~/.dotfiles/.emacs.d/sounds/focus_bell.wav")
-    (setq org-pomodoro-short-break-sound "~/.dotfiles/.emacs.d/sounds/three_beeps.wav")
-    (setq org-pomodoro-long-break-sound "~/.dotfiles/.emacs.d/sounds/three_beeps.wav")
-    (setq org-pomodoro-finished-sound "~/.dotfiles/.emacs.d/sounds/meditation_bell.wav")
-
-    (dw/leader-key-def
-      "op"  '(org-pomodoro :which-key "pomodoro")))
-
-
-
-  (use-package evil-org
-    :after org
-    :hook ((org-mode . evil-org-mode)
-           (org-agenda-mode . evil-org-mode)
-           (evil-org-mode . (lambda () (evil-org-set-key-theme '(navigation todo insert textobjects additional)))))
-    :config
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys))
-
-  (dw/leader-key-def
-    "o"   '(:ignore t :which-key "org mode")
-
-    "oi"  '(:ignore t :which-key "insert")
-    "oil" '(org-insert-link :which-key "insert link")
-
-    "on"  '(org-toggle-narrow-to-subtree :which-key "toggle narrow")
-
-    "os"  '(dw/counsel-rg-org-files :which-key "search notes")
-
-    "oa"  '(org-agenda :which-key "status")
-    "ot"  '(org-todo-list :which-key "todos")
-    "oc"  '(org-capture t :which-key "capture")
-    "ox"  '(org-export-dispatch t :which-key "export"))
-
-
-  )
 
 
 
@@ -807,6 +633,73 @@ folder, otherwise delete a word"
 
 (use-package magit-todos
   :defer t)
+
+
+(use-package git-gutter
+  :straight git-gutter-fringe
+  :diminish
+  :hook ((text-mode . git-gutter-mode)
+         (prog-mode . git-gutter-mode))
+  :config
+  (setq git-gutter:update-interval 2)
+  (unless dw/is-termux
+    (require 'git-gutter-fringe)
+    (set-face-foreground 'git-gutter-fr:added "LightGreen")
+    (fringe-helper-define 'git-gutter-fr:added nil
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX")
+
+    (set-face-foreground 'git-gutter-fr:modified "LightGoldenrod")
+    (fringe-helper-define 'git-gutter-fr:modified nil
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX")
+
+    (set-face-foreground 'git-gutter-fr:deleted "LightCoral")
+    (fringe-helper-define 'git-gutter-fr:deleted nil
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"))
+
+  ;; These characters are used in terminal mode
+  (setq git-gutter:modified-sign "≡")
+  (setq git-gutter:added-sign "≡")
+  (setq git-gutter:deleted-sign "≡")
+  (set-face-foreground 'git-gutter:added "LightGreen")
+  (set-face-foreground 'git-gutter:modified "LightGoldenrod")
+  (set-face-foreground 'git-gutter:deleted "LightCoral"))
+
 
 
 (defun dw/switch-project-action ()
@@ -1035,4 +928,30 @@ folder, otherwise delete a word"
 ;;; lisp modes
     (sp-with-modes sp--lisp-modes
       (sp-local-pair "(" nil :bind "C-("))))
-)
+
+
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+
+
+(use-package rainbow-mode
+  :defer t
+  :hook (org-mode
+         emacs-lisp-mode
+         web-mode
+         tsx-mode))
+
+
+
+(add-to-list 'auto-mode-alist '("\\.info\\'" . Info-on-current-buffer))
+
+
+
+(use-package vterm
+  :after evil-collection
+  :commands vterm
+  :config
+  (setq vterm-max-scrollback 10000)
+  (advice-add 'evil-collection-vterm-insert :before #'vterm-reset-cursor-point))
